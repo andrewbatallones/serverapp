@@ -1,3 +1,43 @@
-<div>
-  {{ appState$ | async | json }}
+<div class="container py-4">
+  <nav class="navbar navbar-dark" style="background-color: #0277bd;">
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1">Manage Servers</span>
+
+      <div class="d-flex">
+        <button type="button" class="btn btn-info dropdown-toggle me-2">ALL</button>
+        <button type="button" class="btn btn-success me-2">New Server</button>
+        <button type="button" class="btn btn-primary me-4">Print Report</button>
+      </div>
+    </div>
+  </nav>
+
+  <div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Image</th>
+          <th scope="col">IP Address</th>
+          <th scope="col">Name</th>
+          <th scope="col">Memory</th>
+          <th scope="col">Type</th>
+          <th scope="col">Status</th>
+          <th scope="col">Ping</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td scope="row"><img src="stubb"></td>
+          <td>ipAddress</td>
+          <td>name</td>
+          <td>memory</td>
+          <td>type</td>
+          <td>status</td>
+          <td><i class="bi bi-router-fill"></i></td>
+          <td><i class="bi bi-trash-fill"></i></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
