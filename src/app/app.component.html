@@ -4,7 +4,14 @@
       <span class="navbar-brand mb-0 h1">Manage Servers</span>
 
       <div class="d-flex">
-        <button type="button" class="btn btn-info dropdown-toggle me-2">ALL</button>
+        <div class="dropdown">
+          <button type="button" class="btn btn-info dropdown-toggle me-2" id="filter-server-button" data-bs-toggle="dropdown">ALL</button>
+          <ul class="dropdown-menu">
+            <li><a href="#" class="dropdown-item">ALL</a></li>
+            <li><a href="#" class="dropdown-item">SERVER UP</a></li>
+            <li><a href="#" class="dropdown-item">SERVER DOWN</a></li>
+          </ul>
+        </div>
         <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#new-server-form">New Server</button>
         <button type="button" class="btn btn-primary me-4">Print Report</button>
       </div>
@@ -47,7 +54,16 @@
                   {{ server.status.replace('_', ' ') }}
                 </span>
               </td>
-              <td><i class="bi bi-router-fill"></i></td>
+              <td>
+                <a style="cursor: pointer;">
+                  <i *ngIf="(filterStatus$ | async) === '' || (filterStatus$ | async) !== server.ipAddress"
+                  class="bi bi-router-fill"></i>
+                  <div *ngIf="(filterStatus$ | async) === server.ipAddress"
+                  class="spinner-grow text-info" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </a>
+              </td>
               <td><i class="bi bi-trash-fill"></i></td>
             </tr>
           </tbody>
@@ -56,7 +72,7 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="DataState.ERROR_STATE">
-      <div class="alert-danger">error</div>
+      <div class="alert-danger">{{ appState.error }}</div>
     </ng-container>
   </ng-container>
 
@@ -68,7 +84,31 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
+          <div class="mb-3">
+            <label for="new-server" class="form-label">IP</label>
+            <input type="text" class="form-control" id="new-server-ip">
+          </div>
+          <div class="mb-3">
+            <label for="new-server" class="form-label">Name</label>
+            <input type="text" class="form-control" id="new-server-name">
+          </div>
+          <div class="row mb-3">
+            <div class="col">
+              <label for="new-server" class="form-label">Memory</label>
+              <input type="text" class="form-control" id="new-server-memory">
+            </div>
+            <div class="col">
+              <label for="new-server" class="form-label">Type</label>
+              <input type="text" class="form-control" id="new-server-type">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="new-server" class="form-label">Status</label>
+            <select class="form-select" name="server-status" id="new-server-status">
+              <option value="1" selected>SERVER UP</option>
+              <option value="2">SERVER TWO</option>
+            </select>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
