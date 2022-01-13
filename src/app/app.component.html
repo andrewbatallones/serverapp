@@ -55,7 +55,7 @@
                 </span>
               </td>
               <td>
-                <a style="cursor: pointer;">
+                <a (click)="pingServer(server.ipAddress)" style="cursor: pointer;">
                   <i *ngIf="(filterStatus$ | async) === '' || (filterStatus$ | async) !== server.ipAddress"
                   class="bi bi-router-fill"></i>
                   <div *ngIf="(filterStatus$ | async) === server.ipAddress"
