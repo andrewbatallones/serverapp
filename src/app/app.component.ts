@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
         }),
         startWith({ dataState: DataState.LOADING_STATE }),
         catchError((error: string) => {
-          return of({ dataState: DataState.ERROR_STATE, error })
+          return of({ dataState: DataState.ERROR_STATE, error });
         })
       );
   }
@@ -57,7 +57,27 @@ export class AppComponent implements OnInit {
         startWith({ dataState: DataState.LOADED_STATE, appData: this.dataSubject.value }),
         catchError((error: string) => {
           this.filterSubject.next('');
-          return of({ dataState: DataState.ERROR_STATE, error })
+          return of({ dataState: DataState.ERROR_STATE, error });
+        })
+      );
+  }
+
+  filterServers(event: Event): void {
+    // response: is just the return value, not necessarily a response from a server
+    // The one thing that's different from the Youtube tutorial.
+    // (ngModelChange) has been deprecated, so you will instead need to use (input), which passes the event object
+    // You can get the enum by getting the value of the target and [] selecting the appropriate enum.
+    // You'll also need a 'selected' option or it will blow an error saying that there is no event passed.
+    let status: Status = Status[(event.target as HTMLInputElement).value];
+    this.appState$ = this.serverService.filter$(status, this.dataSubject.value)
+      .pipe(
+        map(response => {
+          return { dataState: DataState.LOADED_STATE, appData: response }
+        }),
+        startWith({ dataState: DataState.LOADED_STATE, appData: this.dataSubject.value }),
+        catchError((error: string) => {
+          this.filterSubject.next('');
+          return of({ dataState: DataState.ERROR_STATE, error });
         })
       );
   }

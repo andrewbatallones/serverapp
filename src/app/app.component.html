@@ -4,14 +4,12 @@
       <span class="navbar-brand mb-0 h1">Manage Servers</span>
 
       <div class="d-flex">
-        <div class="dropdown">
-          <button type="button" class="btn btn-info dropdown-toggle me-2" id="filter-server-button" data-bs-toggle="dropdown">ALL</button>
-          <ul class="dropdown-menu">
-            <li><a href="#" class="dropdown-item">ALL</a></li>
-            <li><a href="#" class="dropdown-item">SERVER UP</a></li>
-            <li><a href="#" class="dropdown-item">SERVER DOWN</a></li>
-          </ul>
-        </div>
+        <select (input)="filterServers($event)"
+        name="status" class="btn btn-info me-2">
+          <option value="ALL" selected>ALL</option>
+          <option value="SERVER_UP">SERVER UP</option>
+          <option value="SERVER_DOWN">SERVER DOWN</option>
+        </select>
         <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#new-server-form">New Server</button>
         <button type="button" class="btn btn-primary me-4">Print Report</button>
       </div>
