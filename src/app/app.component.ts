@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { BehaviorSubject, catchError, map, Observable, of, startWith } from 'rxjs';
 import { DataState } from './enum/data-state.enum';
 import { Status } from './enum/status.enum';
@@ -16,11 +17,13 @@ export class AppComponent implements OnInit {
   readonly Status = Status;
   private filterSubject = new BehaviorSubject<string>('');
   private dataSubject = new BehaviorSubject<CustomResponse>(null);
+  private isLoading = new BehaviorSubject<boolean>(false);
 
   // This filterSubject is part of RXJS
   // TODO: deep dive - RXJS
   appState$: Observable<AppState<CustomResponse>>;
   filterStatus$ = this.filterSubject.asObservable();
+  isLoading$ = this.isLoading.asObservable();
 
   constructor(private serverService: ServerService) {}
 
@@ -29,7 +32,7 @@ export class AppComponent implements OnInit {
       .pipe(
         map(response => {
           this.dataSubject.next(response);
-          return { dataState: DataState.LOADED_STATE, appData: response }
+          return { dataState: DataState.LOADED_STATE, appData: { ...response, data: { servers: response.data.servers.reverse() } } }
         }),
         startWith({ dataState: DataState.LOADING_STATE }),
         catchError((error: string) => {
@@ -56,7 +59,27 @@ export class AppComponent implements OnInit {
         }),
         startWith({ dataState: DataState.LOADED_STATE, appData: this.dataSubject.value }),
         catchError((error: string) => {
-          this.filterSubject.next('');
+          return of({ dataState: DataState.ERROR_STATE, error });
+        })
+      );
+  }
+
+  saveServer(serverForm: NgForm): void {
+    this.isLoading.next(true);
+    this.appState$ = this.serverService.save$(serverForm.value)
+      .pipe(
+        map(response => {
+          this.dataSubject.next(
+            { ...response, data: { servers: [response.data.server, ...this.dataSubject.value.data.servers] } }
+          );
+          document.getElementById('new-server-form-close').click();
+          this.isLoading.next(false);
+          serverForm.resetForm({ status: this.Status.SERVER_DOWN });
+          return { dataState: DataState.LOADED_STATE, appData: this.dataSubject.value }
+        }),
+        startWith({ dataState: DataState.LOADED_STATE, appData: this.dataSubject.value }),
+        catchError((error: string) => {
+          this.isLoading.next(false);
           return of({ dataState: DataState.ERROR_STATE, error });
         })
       );

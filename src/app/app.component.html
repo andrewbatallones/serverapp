@@ -77,41 +77,47 @@
   <div class="modal fade" id="new-server-form" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="new-server-form-label">New Server</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="new-server" class="form-label">IP</label>
-            <input type="text" class="form-control" id="new-server-ip">
+        <form #serverForm="ngForm" (ngSubmit)="saveServer(serverForm)">
+          <div class="modal-header">
+            <h5 class="modal-title" id="new-server-form-label">New Server</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="mb-3">
-            <label for="new-server" class="form-label">Name</label>
-            <input type="text" class="form-control" id="new-server-name">
-          </div>
-          <div class="row mb-3">
-            <div class="col">
-              <label for="new-server" class="form-label">Memory</label>
-              <input type="text" class="form-control" id="new-server-memory">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="new-server" class="form-label">IP</label>
+              <input ngModel type="text" class="form-control" name="ipAddress" required>
             </div>
-            <div class="col">
-              <label for="new-server" class="form-label">Type</label>
-              <input type="text" class="form-control" id="new-server-type">
+            <div class="mb-3">
+              <label for="new-server" class="form-label">Name</label>
+              <input ngModel type="text" class="form-control" name="name" required>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label for="new-server" class="form-label">Memory</label>
+                <input ngModel type="text" class="form-control" name="memory" required>
+              </div>
+              <div class="col">
+                <label for="new-server" class="form-label">Type</label>
+                <input ngModel type="text" class="form-control" name="type" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="new-server" class="form-label">Status</label>
+              <select ngModel="SERVER_DOWN" class="form-select" name="status" required>
+                <option value="SERVER_UP">SERVER UP</option>
+                <option value="SERVER_DOWN" selected>SERVER DOWN</option>
+              </select>
             </div>
           </div>
-          <div class="mb-3">
-            <label for="new-server" class="form-label">Status</label>
-            <select class="form-select" name="server-status" id="new-server-status">
-              <option value="1" selected>SERVER UP</option>
-              <option value="2">SERVER TWO</option>
-            </select>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="new-server-form-close">Close</button>
+            <button type="submit" class="btn btn-success" [disabled]="serverForm.invalid || (isLoading$ | async)">
+              <span *ngIf="isLoading$ | async" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span *ngIf="isLoading$ | async">Saving...</span>
+              <span *ngIf="!(isLoading$ | async)">Add</span>
+            </button>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-success">Save</button>
-        </div>
+        </form>
       </div>
     </div>
   </div>
