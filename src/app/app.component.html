@@ -62,7 +62,9 @@
                   </div>
                 </a>
               </td>
-              <td><i class="bi bi-trash-fill"></i></td>
+              <td>
+                <a (click)="deleteServer(server)" style="cursor: pointer;"><i class="bi bi-trash-fill text-danger"></i></a>
+              </td>
             </tr>
           </tbody>
         </table>
